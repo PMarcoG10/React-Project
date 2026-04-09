@@ -1,4 +1,4 @@
-// fake backend to display products for the website
+// mock api to display products for the website
 
 // a list of products 
 const products = [
