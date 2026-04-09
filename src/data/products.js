@@ -18,6 +18,14 @@ const products = [
         description: 
             "High-Fidelity Gaming Audio with Active Noise Cancellation",
     },
+    {
+        id: 3,
+        name: "gaming keyboard",
+        price: 129.95,
+        image: "https://www.gravastar.com/cdn/shop/files/MercuryK1GamingKeyboard-GradientBlack_75_MechanicalKeyboard.webp?v=1765441622&width=700",
+        description: 
+            "Fastest gaming keyboard with hall effect switches",
+    },
 ]
 
 // makes data useable to other files
