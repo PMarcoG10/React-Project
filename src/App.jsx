@@ -5,16 +5,21 @@ import Auth from './pages/auth'
 import Navbar from './components/navbar'
 
 import './App.css'
+import AuthProvider from './context/AuthContext'
 
 function App() {
-  return <div className="app">
-    <Navbar />
-    <Routes>
-      <Route path="/" element= {<Home />}/>
-      <Route path="/authentication" element= {<Auth />}/>
-      <Route path="/checkout" element= {<CheckOut />}/>
-    </Routes>
-  </div>
+  return (
+    <AuthProvider>
+      <div className="app">
+        <Navbar />
+        <Routes>
+          <Route path="/" element= {<Home />}/>
+          <Route path="/authentication" element= {<Auth />}/>
+          <Route path="/checkout" element= {<CheckOut />}/>
+        </Routes>
+      </div>
+    </AuthProvider>
+  )
 }
 
 export default App
