@@ -46,8 +46,6 @@ export default function Auth() {
             // otherwise show error message
             setError(result.error)
         }
-
-        console.log(result)
     }
 
     return (
