@@ -1,8 +1,11 @@
 // navbar component used across all pages
 
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Navbar() {
+    const { user, logout } = useAuth()
+
     return (
         // main navigation wrapper
         <nav className="navbar">
@@ -18,12 +21,19 @@ export default function Navbar() {
                 </div>
 
                 {/* authentication section for login/signup buttons */}
-                <div className="navbar-auth">
+                {!user ?  <div className="navbar-auth">
                     <div className="navbar-auth-links">
                         <Link to="/authentication" className="btn btn-secondary">Login</Link>
                         <Link to="/authentication" className="btn btn-primary">SignUp</Link>
                     </div>
-                </div>
+                </div> : (
+                    <div className="navbar-user">
+                        <span className="navbar-greeting">Hello, {user.email}</span>
+                        <button className="btn btn-secondary" onClick={ logout }>
+                            Logout
+                        </button>
+                    </div>
+                )}
             </div>
         </nav>
     )

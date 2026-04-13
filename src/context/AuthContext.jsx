@@ -1,7 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
 
-// creating a context to share authentication state across the app
-export const AuthContext = createContext(null)
+const AuthContext = createContext(null)
 
 export default function AuthProvider({children}) {
     
@@ -64,4 +63,11 @@ export default function AuthProvider({children}) {
             { children }
         </AuthContext.Provider>
     )
+}
+
+// this hook let us call other hooks
+export function useAuth() {
+    const context = useContext(AuthContext)
+
+    return context
 }
