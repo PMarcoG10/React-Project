@@ -8,19 +8,19 @@ import { getProductById } from "../data/products"
 
 export default function ProductDetails() {
     const { id } = useParams()
-    const [ product, setProducts ] = useState(null)
+    const [ product, setProduct ] = useState(null)
     const navigate = useNavigate()
 
     useEffect(() => {
         const foundProduct = getProductById(id)
 
         if(!foundProduct) {
-            navigate("/")
+            navigate("/", { replace: true })
             return
         }
 
-        setProducts(foundProduct)
-    }, [id])
+        setProduct(foundProduct)
+    }, [id, navigate])
 
     if(!product) {
         return <h1>Loading...</h1>
