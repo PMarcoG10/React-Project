@@ -10,23 +10,20 @@ export default function CartProvider({children}) {
 
     // add a product to cart
     function addToCart(productId) {
-        // checks if an item exists in the cart
-        const existing = cartItems.find((item) => item.id === productId)
-        
-        if (existing) {
-            // if an item exists increase the quantity by 1
-            const currentQuantity = existing.quantity
+        setCartItems((prevItems) => {
+            // checks if an item exists in the cart
+            const existing = prevItems.find((item) => item.id === productId)
 
-            const updatedCartItems = cartItems.map((item) => 
-                item.id === productId 
-                    ? { id: productId, quantity: currentQuantity + 1} 
-                    : item)
-
-            setCartItems(updatedCartItems)
-        } else {
+            if (existing) {
+                // if an item exists increase the quantity by 1
+                return prevItems.map((item) =>
+                item.id === productId
+                        ? { ...item, quantity: item.quantity + 1 }
+                    : item
+            ) }
             // if an item does not exist add it with a quantity 1
-            setCartItems([...cartItems, { id: productId, quantity: 1}])
-        }
+            return [...prevItems, { id: productId, quantity: 1 }]
+        })
     }
 
     // return cart items with full product data
@@ -39,22 +36,21 @@ export default function CartProvider({children}) {
 
     // remove product completely from the cart
     function removeFromCart(productId) {
-        setCartItems(cartItems.filter((item) => item.id !== productId))
+        setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId))
     }
 
     // update the quantity of a specific product
     function updateQuantity(productId, quantity) {
-        if (quantity <= 0) {
-            removeFromCart(productId)
-            return
-        }
+        setCartItems((prevItems) => {
+            if (quantity <= 0) {
+                return prevItems.filter((item) => item.id !== productId)
+            }
 
-        // otherwise update the quantity
-        setCartItems(
-            cartItems.map((item) => 
-                item.id === productId ? { ...item, quantity} : item
+            // otherwise update the quantity
+            return prevItems.map((item) =>
+                item.id === productId ? { ...item, quantity } : item
             )
-        )
+        })
     }
 
     // calculate the total price of all items in the cart

@@ -110,7 +110,7 @@ export default function CheckOut() {
                             <p className="checkout-total-label">
                                 tax({(TAX_RATE * 100).toFixed(2)}%):
                             </p>
-                            <p className="chekout-total-value">
+                            <p className="checkout-total-value">
                                 ${tax.toFixed(2)}
                             </p>
                         </div>
