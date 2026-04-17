@@ -2,92 +2,113 @@ import { createContext, useState, useContext } from "react";
 import { getProductById } from "../data/products";
 
 // create a context for the cart
-const CartContext = createContext(null)
+const CartContext = createContext(null);
 
-export default function CartProvider({children}) {
-    // cartItems will store objects like : { id: 2, quantity: 4 }
-    const [ cartItems, setCartItems ] = useState([])
+// example tax rate
+const TAX_RATE = 0.0825;
 
-    // add a product to cart
-    function addToCart(productId) {
-        setCartItems((prevItems) => {
-            // checks if an item exists in the cart
-            const existing = prevItems.find((item) => item.id === productId)
+export default function CartProvider({ children }) {
+  // cartItems will store objects like : { id: 2, quantity: 4 }
+  const [cartItems, setCartItems] = useState([]);
 
-            if (existing) {
-                // if an item exists increase the quantity by 1
-                return prevItems.map((item) =>
-                item.id === productId
-                        ? { ...item, quantity: item.quantity + 1 }
-                    : item
-            ) }
-            // if an item does not exist add it with a quantity 1
-            return [...prevItems, { id: productId, quantity: 1 }]
-        })
-    }
+  // add a product to cart
+  function addToCart(productId) {
+    setCartItems((prevItems) => {
+      // checks if an item exists in the cart
+      const existing = prevItems.find((item) => item.id === productId);
 
-    // return cart items with full product data
-    function getCartItemsWithProducts() {
-        return cartItems.map(item => ({
-            ...item,
-            product: getProductById(item.id)
-        })).filter(item => item.product)
-    }
+      if (existing) {
+        // if an item exists increase the quantity by 1
+        return prevItems.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
+        );
+      }
+      // if an item does not exist add it with a quantity 1
+      return [...prevItems, { id: productId, quantity: 1 }];
+    });
+  }
 
-    // remove product completely from the cart
-    function removeFromCart(productId) {
-        setCartItems((prevItems) => prevItems.filter((item) => item.id !== productId))
-    }
+  // return cart items with full product data
+  function getCartItemsWithProducts() {
+    return cartItems
+      .map((item) => ({
+        ...item,
+        product: getProductById(item.id),
+      }))
+      .filter((item) => item.product);
+  }
 
-    // update the quantity of a specific product
-    function updateQuantity(productId, quantity) {
-        setCartItems((prevItems) => {
-            if (quantity <= 0) {
-                return prevItems.filter((item) => item.id !== productId)
-            }
+  // remove product completely from the cart
+  function removeFromCart(productId) {
+    setCartItems((prevItems) =>
+      prevItems.filter((item) => item.id !== productId),
+    );
+  }
 
-            // otherwise update the quantity
-            return prevItems.map((item) =>
-                item.id === productId ? { ...item, quantity } : item
-            )
-        })
-    }
+  // update the quantity of a specific product
+  function updateQuantity(productId, quantity) {
+    setCartItems((prevItems) => {
+      if (quantity <= 0) {
+        return prevItems.filter((item) => item.id !== productId);
+      }
 
-    // calculate the total price of all items in the cart
-    function getCartTotal() {
-        const total = cartItems.reduce((total, item) =>{
-            const product = getProductById(item.id)
+      // otherwise update the quantity
+      return prevItems.map((item) =>
+        item.id === productId ? { ...item, quantity } : item,
+      );
+    });
+  }
 
-            return total + (product ? product.price * item.quantity : 0)
-        } , 0)
+  // calculate the total price of all items in the cart
+  function getCartTotal() {
+    const total = cartItems.reduce((total, item) => {
+      const product = getProductById(item.id);
 
-        return total
-    }
+      return total + (product ? product.price * item.quantity : 0);
+    }, 0);
 
-    // empty the entire cart 
-    function clearCart() {
-        setCartItems([])
-    }
+    return total;
+  }
 
-    return (
-        <CartContext.Provider 
-        value={ {
-            cartItems,
-            addToCart,
-            getCartItemsWithProducts,
-            removeFromCart,
-            updateQuantity,
-            getCartTotal,
-            clearCart,
-            } }>
-            { children }
-        </CartContext.Provider>
-    )
+  // tax amount
+  function getCartTax() {
+    return getCartTotal() * TAX_RATE;
+  }
+
+  // get final with tax
+  function finalTotal() {
+    return getCartTotal() + getCartTax();
+  }
+
+  // empty the entire cart
+  function clearCart() {
+    setCartItems([]);
+  }
+
+  return (
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        getCartItemsWithProducts,
+        removeFromCart,
+        updateQuantity,
+        getCartTotal,
+        getCartTax,
+        finalTotal,
+        clearCart,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
 }
 
 // custom hook to access the cart context easily
 export function useCart() {
-    const context = useContext(CartContext)
+  const context = useContext(CartContext);
 
-    return context
+  return context;
 }
