@@ -64,7 +64,7 @@ This project focuses on core React Concepts like components, hooks, and global s
   - image
   - description
 
-#⏯️Showcase
+# ⏯️Showcase
 Link to the demo of the project
 
 
