@@ -65,8 +65,9 @@ This project focuses on core React Concepts like components, hooks, and global s
   - description
 
 # ⏯️Showcase
-Link to the demo of the project
+Link to the demo project
 
+https://react-project-zeta-nine-47.vercel.app/
 
 # 📄License
 This project is for educational purposes.
